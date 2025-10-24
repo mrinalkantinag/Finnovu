@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.ui.platform.LocalConfiguration
@@ -65,15 +64,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalAccessibilityManager
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -81,13 +74,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -128,13 +114,8 @@ fun HomeScreen() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("home") {
-                // Home content wrapped in AnimatedContent keyed by route name
-                AnimatedContent(targetState = "home", transitionSpec = {
-                    ContentTransform(
-                        enter = slideInHorizontally(tween(300)) + fadeIn(tween(300)),
-                        exit = slideOutHorizontally(tween(300)) + fadeOut(tween(300))
-                    )
-                }) {
+                // Home content wrapped in Crossfade for a version-safe fade transition
+                Crossfade(targetState = "home", animationSpec = tween(300)) {
                     Column(modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)) {
@@ -145,12 +126,7 @@ fun HomeScreen() {
                 }
             }
             composable("settings") {
-                AnimatedContent(targetState = "settings", transitionSpec = {
-                    ContentTransform(
-                        enter = slideInHorizontally(tween(300)) + fadeIn(tween(300)),
-                        exit = slideOutHorizontally(tween(300)) + fadeOut(tween(300))
-                    )
-                }) {
+                Crossfade(targetState = "settings", animationSpec = tween(300)) {
                     SettingsScreen(onBack = { navController.popBackStack() }, snackbarHostState = snackbarHostState)
                 }
             }
