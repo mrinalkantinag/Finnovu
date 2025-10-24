@@ -67,6 +67,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalAccessibilityManager
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -129,8 +130,10 @@ fun HomeScreen() {
             composable("home") {
                 // Home content wrapped in AnimatedContent keyed by route name
                 AnimatedContent(targetState = "home", transitionSpec = {
-                    slideInHorizontally(tween(300)) + fadeIn(tween(300)) with
-                            slideOutHorizontally(tween(300)) + fadeOut(tween(300))
+                    ContentTransform(
+                        enter = slideInHorizontally(tween(300)) + fadeIn(tween(300)),
+                        exit = slideOutHorizontally(tween(300)) + fadeOut(tween(300))
+                    )
                 }) {
                     Column(modifier = Modifier
                         .fillMaxSize()
@@ -143,8 +146,10 @@ fun HomeScreen() {
             }
             composable("settings") {
                 AnimatedContent(targetState = "settings", transitionSpec = {
-                    slideInHorizontally(tween(300)) + fadeIn(tween(300)) with
-                            slideOutHorizontally(tween(300)) + fadeOut(tween(300))
+                    ContentTransform(
+                        enter = slideInHorizontally(tween(300)) + fadeIn(tween(300)),
+                        exit = slideOutHorizontally(tween(300)) + fadeOut(tween(300))
+                    )
                 }) {
                     SettingsScreen(onBack = { navController.popBackStack() }, snackbarHostState = snackbarHostState)
                 }
